@@ -1,17 +1,16 @@
-import mysql from 'mysql'
-const con=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"faculty"
-})
-con.connect(function(err){
-    if(err){
-        console.log("Connection error")
+const con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "attendance"
+});
 
-    }else{
-        console.log("Connection successful")
+con.connect((err) => {
+    if (err) {
+        console.error('Error connecting to MySQL database:', err);
+        return;
     }
-})
+    console.log('Connected to MySQL database');
+});
 
-export default con;
+module.exports = con;
