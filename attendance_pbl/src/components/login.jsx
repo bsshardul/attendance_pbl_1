@@ -18,7 +18,10 @@ import { useNavigate } from 'react-router-dom'
            // Frontend Axios POST path:
             axios.post('http://localhost:3001/auth/facultylogin', values)
     
-            .then(res => console.log(res))
+            .then(res => {
+                navigate('/dashboard')
+
+            })
                
             .catch(err => console.log(err));
         }

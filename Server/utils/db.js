@@ -1,8 +1,11 @@
+import mysql from 'mysql';
+
+
 const con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
-    database: "attendance"
+    password: "Mysql@2024",
+    database: "attendance_pbl" // Specify the database name here
 });
 
 con.connect((err) => {
@@ -13,4 +16,6 @@ con.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
-module.exports = con;
+export default con;
+
+
