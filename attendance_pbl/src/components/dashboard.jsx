@@ -1,9 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+//import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import Axios for making HTTP requests
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BiHome, BiUser, BiCalendar, BiLogOut } from 'react-icons/bi';
-
+import React, { useState, useEffect } from 'react';
 const Navigation = () => {
+  const navigate = useNavigate(); // Use the useNavigate hook to navigate
+
+  const handleLogout = () => {
+    axios.post('http://localhost:3001/auth/logout')
+      .then(res => {
+        if (res.data && res.data.success) {
+          // Clear authentication state (if any)
+          // Redirect to login page
+          navigate('/login');
+        } else {
+          // Handle logout failure
+          console.error('Logout failed');
+        }
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        // Handle error
+      });
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -21,10 +42,15 @@ const Navigation = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item"><Link to="/dashboard" className="nav-link"><BiHome className="me-1" /> Home</Link></li>
+            <li className="nav-item"><Link to="/" className="nav-link"><BiHome className="me-1" /> Home</Link></li>
             <li className="nav-item"><Link to="/manage-students" className="nav-link"><BiUser className="me-1" /> Manage Students</Link></li>
             <li className="nav-item"><Link to="/attendance" className="nav-link"><BiCalendar className="me-1" /> Attendance</Link></li>
-            <li className="nav-item"><Link to="/logout" className="nav-link"><BiLogOut className="me-1" /> Logout</Link></li>
+            {/* Use a single logout button */}
+            <li className="nav-item">
+              <button className="nav-link" onClick={handleLogout}>
+                <BiLogOut className="me-1" /> Logout
+              </button>
+            </li>
           </ul>
         </div>
       </div>
@@ -49,8 +75,64 @@ const Header = () => {
   );
 };
 
-const Footer = () => {
+const WelcomePage = () => {
+  const [currentIndex, setCurrentIndex] = useState(0); // Use useState hook to define state
+
+  const images = [
+    "/Images/homeimage1.jpeg",
+    "/Images/homeimage2.jpeg",
+    "/Images/homeimage3.jpeg",
+    "/Images/homeimage4.jpeg"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // Change image every 3 seconds
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
+    <div className="container mt-4">
+      <h2 className="text-center mb-4">Welcome to Pune Institute of Computer Technology (PICT)</h2>
+      <div className="row justify-content-center">
+        <div className="col-lg-8">
+          <p className="lead text-center">
+            Pune Institute of Computer Technology popularly known as PICT, is an elite academic Institute located in Pune,
+            “The Oxford of the East.” Since our establishment in 1983, PICT has been revolutionizing the
+            education sector by nurturing skilled and industry-ready engineers.
+          </p>
+          <h3>Vision:</h3>
+          <p>
+            To be a distinguished center for nurturing the holistic development of globally
+            competent young engineers and researchers in the field of Electronics and Telecommunication Engineering.
+          </p>
+          <h3>Mission:</h3>
+          <p>
+            To inculcate and stimulate Electronics and Telecommunication expertise by adopting to global innovative
+            educational and research practices to create dynamic engineering professionals with enhanced technical skill set and
+            hence global acceptability.
+          </p>
+        </div>
+      </div>
+      <div className="row justify-content-center">
+        <div className="col-lg-4 text-center mb-4">
+          <img
+            src={images[currentIndex]}
+            alt={`Floating Image ${currentIndex + 1}`}
+            className="img-fluid img-thumbnail"
+            style={{ maxWidth: 'auto', height: 'auto', objectFit: 'cover', border: '2px solid #ccc', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s ease' }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+const Footer = () => {
+  // Your existing Footer component code
+return (
     <footer className="bg-dark py-4 text-white text-center">
       <div className="container">
         <div className="row">
@@ -77,49 +159,16 @@ const Footer = () => {
             <p>
               Shardul Bramhanathkar
             </p>
+            <p>Ashutosh Bhate</p>
+            <h5>Project Members</h5>
             <p>
-              Ashutosh Bhate
+              Krupa Gaikwad
             </p>
+            <p> Shruti Bhosale</p>
           </div>
         </div>
       </div>
     </footer>
-  );
-};
-
-// Define AttendancePage component outside of DashboardPage component
-const AttendancePage = () => {
-  // Dummy data for student attendance
-  const studentAttendance = [
-    { rollNumber: '001', name: 'PBL Student 1', timeIn: '08:00 AM', timeOut: '04:00 PM' },
-    { rollNumber: '002', name: 'PBL Student 2', timeIn: '08:15 AM', timeOut: '04:30 PM' },
-    // Add more student data as needed
-  ];
-
-  return (
-    <div className="container mt-4 mb-5"> {/* Added more margin-bottom */}
-      <h2 className="mb-4">Student Attendance</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Roll Number</th>
-            <th>Name</th>
-            <th>Time In</th>
-            <th>Time Out</th>
-          </tr>
-        </thead>
-        <tbody>
-          {studentAttendance.map((student, index) => (
-            <tr key={index}>
-              <td>{student.rollNumber}</td>
-              <td>{student.name}</td>
-              <td>{student.timeIn}</td>
-              <td>{student.timeOut}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
 };
 
@@ -128,7 +177,7 @@ const DashboardPage = () => {
     <>
       <Header />
       <Navigation />
-      <AttendancePage />
+      <WelcomePage />
       <Footer />
     </>
   );
