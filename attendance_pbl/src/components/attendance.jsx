@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from './common/Navigation';
 import Header from './common/Header';
 import Footer from './common/Footer';
-import "./managestudents.css"; 
+import { format } from 'date-fns';
+
 const Attendance = () => {
-  // Dummy data for student attendance
-  const studentAttendance = [
-    { rollNumber: '1', name: 'PBL Student 1', timeIn: '08:00 AM', timeOut: '04:00 PM' },
-    { rollNumber: '2', name: 'PBL Student 2', timeIn: '08:15 AM', timeOut: '04:30 PM' },
-    // Add more student data as needed
-  ];
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  useEffect(() => {
+    fetchAttendanceData();
+  }, []);
+
+  const fetchAttendanceData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/attendance');
+      if (!response.ok) {
+        throw new Error('Failed to fetch attendance data');
+      }
+      const data = await response.json();
+      setAttendanceData(data);
+    } catch (error) {
+      console.error('Error fetching attendance data:', error);
+    }
+  };
 
   return (
     <>
@@ -19,36 +32,37 @@ const Attendance = () => {
         <div className="attendancepageheader">
           <h2>Attendance Monitor</h2>
         </div>
-        </div>
+      </div>
 
-        <div className="container mt-4 mb-5"> {/* Added more margin-bottom */}
-          <h2 className="mb-4">Student Attendance</h2>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Time In</th>
-                <th>Time Out</th>
+      <div className="container mt-4 mb-5">
+        <h2 className="mb-4">Student Attendance</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Roll Number</th>
+              <th>Name</th>
+              <th>Tag ID</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {attendanceData.map((attendance, index) => (
+              <tr key={index}>
+                <td>{attendance.id}</td>
+                <td>{attendance.roll_number}</td>
+                <td>{attendance.name}</td>
+                <td>{attendance.tag_id}</td>
+                {/* Format the timestamp using date-fns */}
+                <td>{format(new Date(attendance.timestamp), 'yyyy-MM-dd HH:mm:ss')}</td>
               </tr>
-            </thead>
-            <tbody>
-              {studentAttendance.map((student, index) => (
-                <tr key={index}>
-                  <td>{student.rollNumber}</td>
-                  <td>{student.name}</td>
-                  <td>{student.timeIn}</td>
-                  <td>{student.timeOut}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <Footer />
-      </>
-
-      );
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
-
-      export default Attendance; // Exporting the Attendance component as default
+export default Attendance;
