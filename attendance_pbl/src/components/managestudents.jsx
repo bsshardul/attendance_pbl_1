@@ -1,63 +1,84 @@
-import React, { useState } from "react";
-import "./managestudents.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Navigation from './common/Navigation';
+import Header from './common/Header';
+import Footer from './common/Footer';
+import "./managestudents.css"; // Import external CSS file
 
 function ManageStudents() {
-  const [studentName, setStudentName] = useState(""); // state for student name
-  const [students, setStudents] = useState([
-    { id: 1, name: "Shardul Bramhanathkar" },
-    { id: 2, name: "Ashutosh Bhate" },
-    { id: 3, name: "Krupa Gaikawd" },
-    { id: 4, name: "Shruti Bhosale" },
-  ]); // state for students
+  const [studentName, setStudentName] = useState("");
+  const [students, setStudents] = useState([]);
 
-  // Function to handle adding a new student
-  const addStudent = () => {
-    if (studentName.trim() !== "") {
-      // If the student name is not empty
-      // Generate a unique ID by incrementing the ID of the last student
-      const newStudentId = students.length > 0 ? students[students.length - 1].id + 1 : 1;
-      // Create a new student object with the generated ID and the entered name
-      const newStudent = { id: newStudentId, name: studentName };
-      // Add the new student to the list of students
-      setStudents([...students, newStudent]);
-      // Clear the input field
-      setStudentName("");
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/students");
+      setStudents(response.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
     }
   };
 
-  // Function to handle deleting a student by ID
-  const deleteStudent = (id) => {
-    // Filter out the student with the given ID
-    const updatedStudents = students.filter((student) => student.id !== id);
-    // Update the list of students
-    setStudents(updatedStudents);
+  const addStudent = async () => {
+    if (studentName.trim() !== "") {
+      try {
+        await axios.post("http://localhost:3001/students", { name: studentName });
+        fetchStudents();
+        setStudentName("");
+      } catch (error) {
+        console.error("Error adding student:", error);
+      }
+    }
+  };
+
+  const deleteStudent = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/students/${id}`);
+      fetchStudents();
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
   };
 
   return (
-    <div className="manage-students-container">
-      <h2>Manage Students</h2>
-      <div className="add-student">
-        <input
-          type="text"
-          value={studentName}
-          onChange={(e) => setStudentName(e.target.value)}
-          placeholder="Enter student name"
-        />
-        <button onClick={addStudent}>Add Student</button>
+    <>
+      <Header />
+      <Navigation />
+      <div className="manage-students-container">
+        <div className="manage-students-header">
+          <h2>Manage Students</h2>
+        </div>
+
+        <div className="add-student">
+          <input
+            type="text"
+            value={studentName}
+            onChange={(e) => setStudentName(e.target.value)}
+            placeholder="Enter student name"
+          />
+          <button onClick={addStudent}>Add Student</button>
+        </div>
+
+        <div className="student-list">
+          <h3>Student List</h3>
+          <ul>
+            {students.map((student) => (
+              <li key={student.id}>
+                <span className="student-id">ID: {student.id}</span>
+                <span className="student-name">{student.name}</span>
+                <div className="delete-button-container">
+                  <button className="delete-button" onClick={() => deleteStudent(student.id)}>Delete</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div className="student-list">
-        <h3>Student List</h3>
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              <span className="student-id">ID: {student.id}</span>
-              <span className="student-name">{student.name}</span>
-              <button className="delete-button" onClick={() => deleteStudent(student.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+      <Footer />
+    </>
   );
 }
 

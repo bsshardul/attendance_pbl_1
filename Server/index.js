@@ -1,19 +1,23 @@
 import express from "express";
 import cors from 'cors';
-import facultyrouter from "./routes/facultyroute.js";
+import facultyRouter from "./routes/facultyroute.js";
+import studentRouter from "./routes/studentroute.js"; // Import student router
 
 const app = express();
 
 // Use CORS middleware with specific configuration
 app.use(cors({
-    origin: "http://localhost:5175", // Specify the origin without trailing slash
-    methods: ['GET', 'POST', 'PUT'], // Specify allowed HTTP methods
-    credentials: true // Allow sending cookies in cross-origin requests
+    origin: "http://localhost:5173",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Corrected method name
+    credentials: true
 }));
 
 app.use(express.json());
-app.use('/auth', facultyrouter);
+
+// Define routes
+app.use('/auth', facultyRouter);
+app.use('/students', studentRouter); // Use student router
 
 app.listen(3001, () => {
-    console.log("Server is running.");
+    console.log("Server is running on port 3001");
 });
