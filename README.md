@@ -55,13 +55,10 @@ Edit
 cd ../Server
 npm install
 node index.js
-4️⃣ Import the MySQL database:
+```
 
-Open phpMyAdmin or MySQL CLI
-
-Import the .sql file from the /DB folder
-
-📐 Architecture Overview
+---
+## 📐 Architecture Overview
 RFID tag is scanned via RC522 module
 
 NodeMCU ESP8266 reads the UID and sends it to the backend server
@@ -70,7 +67,9 @@ Backend verifies UID, records timestamp, and logs attendance into MySQL
 
 Frontend displays updated logs in real-time
 
-👨‍💻 My Role
+---
+
+## 👨‍💻 My Role
 Full Stack Developer & Team Lead
 
 Designed and developed the entire full-stack web application
@@ -83,7 +82,9 @@ Coordinated with the hardware team for seamless RFID integration
 
 Oversaw project planning, implementation, and debugging
 
-🔮 Future Scope
+---
+
+## 🔮 Future Scope
 Voice announcements on successful scan
 
 Role-based dashboards for admin/students
@@ -92,7 +93,9 @@ Cloud deployment for remote access
 
 Attendance reports and data visualization
 
-👥 Team Members
+---
+
+## 👥 Team Members
 @bsshardul – Full Stack Development & Team Lead
 
 @AshutoshBhate – Hardware Integration
@@ -100,3 +103,4 @@ Attendance reports and data visualization
 Krupa Gaikwad – Testing & Documentation
 
 Shruti Bhosale – Testing & Documentation
+---
