@@ -1,6 +1,6 @@
 # 📚 RFID Based Attendance System
 
-An RFID-based real-time attendance tracking system designed as part of a second-year mini-project at **Pune Institute of Computer Technology (PICT)**. This project integrates **NodeMCU ESP8266** and **RFID reader modules** with a custom-built full-stack web interface to enable contactless, automated attendance logging for students and staff.
+An RFID-based real-time attendance tracking system designed as part of a second-year project-based-learning at **Pune Institute of Computer Technology (PICT)**. This project integrates **NodeMCU ESP8266** and **RFID reader modules** with a custom-built full-stack web interface to enable contactless, automated attendance logging for students and staff.
 
 > ✅ Built with React.js, Express.js, and MySQL  
 > 🧠 Led and developed the full-stack web platform
@@ -11,7 +11,6 @@ An RFID-based real-time attendance tracking system designed as part of a second-
 
 - 📲 RFID card tap for attendance logging  
 - ⏱️ Real-time name & timestamp recording  
-- 🧑‍🏫 Separate access for students and faculty  
 - 💾 MySQL-backed persistent storage  
 - 🖥️ Simple, clean, and responsive web UI  
 - 🔐 Locally hosted for testing; ready for production deployment
@@ -24,7 +23,6 @@ An RFID-based real-time attendance tracking system designed as part of a second-
 - **Frontend**: React.js + Vite  
 - **Backend**: Node.js + Express.js  
 - **Database**: MySQL  
-- **Server**: Apache (Localhost)
 
 ### 🔌 Hardware
 - NodeMCU ESP8266  
@@ -103,4 +101,5 @@ Attendance reports and data visualization
 Krupa Gaikwad – Testing & Documentation
 
 Shruti Bhosale – Testing & Documentation
+
 ---
